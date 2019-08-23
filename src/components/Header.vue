@@ -2,8 +2,8 @@
   <div>
     <div>
       <b-nav>
-        <b-nav-item active>Trivia App</b-nav-item>
-        <b-nav-item>Counter: 4/10</b-nav-item>
+        <b-nav-item disabled><b>Trivia App</b></b-nav-item>
+        <b-nav-item disabled>Counter: 4/10</b-nav-item>
       </b-nav>
     </div>
   </div>

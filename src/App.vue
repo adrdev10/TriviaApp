@@ -1,26 +1,61 @@
 <template>
   <div id="app">
     <Header></Header>
-    <QuestionBox></QuestionBox>
+    <b-container class="bv-example-row">
+      <b-row>
+        <b-col sm="6" offset="3">
+          <QuestionBox v-bind:currentQuestion="questions[index]"
+                      v-bind:index="next"
+          ></QuestionBox>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
 <script>
-import Header from './components/Header'
-import QuestionBox from './components/QuestionBox'
+import Header from "./components/Header";
+import QuestionBox from "./components/QuestionBox";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Header,
     QuestionBox
+  },
+  data() {
+    return {
+      questions: [],
+      index: 0
+    };
+  },
+
+  methods: {
+    next() {
+      this.index++;
+    }
+  },
+  
+  created() {
+
+  },
+  mounted() {
+    fetch("https://opentdb.com/api.php?amount=20&type=multiple", {
+      method: "get"
+    })
+      .then(resp => {
+        return resp.json();
+      })
+      .then(jdata => {
+        this.questions = jdata.results;
+      });
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

@@ -32,7 +32,7 @@ export default {
 
   methods: {
     next() {
-      this.index++;
+      this.index = (this.index+1) % this.questions.length;
     }
   },
   

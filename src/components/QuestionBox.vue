@@ -10,8 +10,12 @@
       </template>
 
       <hr class="my-4" />
-
-      <p>List of Answers</p>
+      <b-list-group>
+        <b-list-group-item
+          v-for="(answer,i) in currentQuestion.incorrect_answers"
+          v-bind:key="i"
+        >{{answer}}</b-list-group-item>
+      </b-list-group>
 
       <b-button variant="primary" href="#">Do Something</b-button>
       <b-button variant="success" href="#" v-on:click="forceRerender()" @click="index">Next</b-button>

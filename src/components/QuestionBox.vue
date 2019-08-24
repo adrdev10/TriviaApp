@@ -4,19 +4,17 @@
       <template slot="lead">
         <div>
           <transition name="fade">
-            <p v-if="show" :key="currentQuestion.question">{{currentQuestion.question}}</p>
+            <p v-show="show" :key="currentQuestion.question">{{currentQuestion.question}}</p>
           </transition>
         </div>
       </template>
 
       <hr class="my-4" />
-      <b-list-group>
-        <b-list-group-item
-          v-for="(answer,i) in currentQuestion.incorrect_answers"
-          v-bind:key="i"
-        >{{answer}}</b-list-group-item>
-      </b-list-group>
-
+      <transition>
+        <b-list-group v-if="show">
+          <b-list-group-item v-for="(answer, i) in listAnswers" v-bind:key="i">{{answer}}</b-list-group-item>
+        </b-list-group>
+      </transition>
       <b-button variant="primary" href="#">Do Something</b-button>
       <b-button variant="success" href="#" v-on:click="forceRerender()" @click="index">Next</b-button>
     </b-jumbotron>
@@ -34,6 +32,21 @@ export default {
     };
   },
 
+  computed: {
+    listAnswers() {
+      let answers = [...this.currentQuestion.incorrect_answers];
+      answers.push(this.currentQuestion.correct_answer);
+      console.log("Correct answer: " + this.currentQuestion.correct_answer);
+      for (var i = answers.length - 1; i > 0; i--) {
+        const randJ = Math.floor(Math.random() * (i + 1));
+        let temp = answers[i];
+        answers[i] = answers[randJ];
+        answers[randJ] = temp;
+      }
+      return answers;
+    }
+  },
+
   methods: {
     forceRerender: function() {
       this.show = false;
@@ -41,7 +54,7 @@ export default {
         function() {
           this.show = true;
         }.bind(this),
-        500
+        600
       );
     }
   },

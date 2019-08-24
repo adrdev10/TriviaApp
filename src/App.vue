@@ -3,7 +3,7 @@
     <Header></Header>
     <b-container class="bv-example-row">
       <b-row>
-        <b-col sm="6" offset="3">
+        <b-col sm="10" offset="1">
           <QuestionBox v-bind:currentQuestion="questions[index]"
                       v-bind:index="next"
           ></QuestionBox>

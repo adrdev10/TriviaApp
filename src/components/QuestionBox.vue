@@ -4,7 +4,6 @@
       <b-alert show dismissible fade
       v-if="selectedAnswer">
         {{selectedAnswer}}
-        <b>&rArr;</b>
       </b-alert>
     </div>
     <b-jumbotron>
@@ -18,7 +17,7 @@
 
       <hr class="my-4" />
       <transition>
-        <b-list-group v-if="show">
+        <b-list-group v-show="show">
           <b-list-group-item
             v-for="(answer, i) in listAnswers"
             v-bind:key="i"
@@ -72,8 +71,11 @@ export default {
     },
 
     selectedAnswerChoice: function(index) {
-      let answers = [...this.answers];
-          this.selectedAnswer = answers[index];
+        let answers = [...this.answers];
+        let ans = (index) => {
+            this.selectedAnswer = answers[index];
+        }
+        ans(index);
     }
   },
 

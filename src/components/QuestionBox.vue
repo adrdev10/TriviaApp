@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div>
+      <b-alert show dismissible fade
+      v-if="selectedAnswer">
+        {{selectedAnswer}}
+        <b>&rArr;</b>
+      </b-alert>
+    </div>
     <b-jumbotron>
       <template slot="lead">
         <div>
@@ -12,7 +19,11 @@
       <hr class="my-4" />
       <transition>
         <b-list-group v-if="show">
-          <b-list-group-item v-for="(answer, i) in listAnswers" v-bind:key="i">{{answer}}</b-list-group-item>
+          <b-list-group-item
+            v-for="(answer, i) in listAnswers"
+            v-bind:key="i"
+            v-on:click="selectedAnswerChoice(i)"
+          >{{answer}}</b-list-group-item>
         </b-list-group>
       </transition>
       <b-button variant="primary" href="#">Do Something</b-button>
@@ -20,7 +31,6 @@
     </b-jumbotron>
   </div>
 </template>
-
 <script>
 // Globally
 import Vue from "vue";
@@ -28,7 +38,9 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      show: true
+      show: true,
+      answers: null,
+      selectedAnswer: "",
     };
   },
 
@@ -43,6 +55,7 @@ export default {
         answers[i] = answers[randJ];
         answers[randJ] = temp;
       }
+      this.answers = answers;
       return answers;
     }
   },
@@ -56,6 +69,11 @@ export default {
         }.bind(this),
         600
       );
+    },
+
+    selectedAnswerChoice: function(index) {
+      let answers = [...this.answers];
+          this.selectedAnswer = answers[index];
     }
   },
 
@@ -73,5 +91,22 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+.list-group-item:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: blue;
+}
+
+.correct {
+  background-color: green;
+}
+
+.incorrect {
+  background-color: red;
 }
 </style>

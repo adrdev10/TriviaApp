@@ -1,10 +1,7 @@
 <template>
   <div>
     <div>
-      <b-alert show dismissible fade
-      v-if="selectedAnswer">
-        {{selectedAnswer}}
-      </b-alert>
+      <b-alert show dismissible fade v-if="selectedAnswer">{{"You chose: " + this.selectedAnswer}}</b-alert>
     </div>
     <b-jumbotron>
       <template slot="lead">
@@ -22,6 +19,7 @@
             v-for="(answer, i) in listAnswers"
             v-bind:key="i"
             v-on:click="selectedAnswerChoice(i)"
+            v-bind:class="correctSelected(i)"
           >{{answer}}</b-list-group-item>
         </b-list-group>
       </transition>
@@ -40,6 +38,7 @@ export default {
       show: true,
       answers: null,
       selectedAnswer: "",
+      isUserCorrect: Boolean,
     };
   },
 
@@ -58,7 +57,6 @@ export default {
       return answers;
     }
   },
-
   methods: {
     forceRerender: function() {
       this.show = false;
@@ -66,16 +64,41 @@ export default {
         function() {
           this.show = true;
         }.bind(this),
-        600
+        750
       );
     },
 
-    selectedAnswerChoice: function(index) {
-        let answers = [...this.answers];
-        let ans = (index) => {
-            this.selectedAnswer = answers[index];
+    correctSelected(index) {
+      let evaluteCorrect = userAnswer => {
+        let indexCorrect = this.selectedAnswer;
+        if (this.selectedAnswer === "") {
+          return {
+            incorrect: null,
+            correct: null
+          };
         }
-        ans(index);
+        if (this.selectedAnswer !== this.currentQuestion.correct_answer) {
+          return {
+            incorrect: this.selectedAnswer === this.answers[index],
+            correct: false
+          };
+        } else {
+          this.isUserCorrect = true;
+          return {
+            correct:this.isUserCorrect && this.selectedAnswer === this.answers[index],
+            incorrect: false
+          };
+        }
+      };
+      return evaluteCorrect(this.selectedAnswer);
+    },
+
+    selectedAnswerChoice: function(index) {
+      let answers = [...this.answers];
+      let ans = index => {
+        this.selectedAnswer = answers[index];
+      };
+      ans(index);
     }
   },
 
@@ -96,7 +119,7 @@ export default {
 }
 
 .list-group-item:hover {
-  background-color: #eee;
+  /* background-color: #eee; */
   cursor: pointer;
 }
 
@@ -105,7 +128,7 @@ export default {
 }
 
 .correct {
-  background-color: green;
+  background-color: #28a745;
 }
 
 .incorrect {

@@ -18,12 +18,13 @@
           <b-list-group-item
             v-for="(answer, i) in listAnswers"
             v-bind:key="i"
-            v-on:click="selectedAnswerChoice(i)"
+            v-on:click.self.prevent.once="selectedAnswerChoice(i)"
             v-bind:class="correctSelected(i)"
           >{{answer}}</b-list-group-item>
         </b-list-group>
       </transition>
       <b-button variant="primary" href="#">Do Something</b-button>
+      <!-- Using event modifiers-->
       <b-button variant="success" href="#" v-on:click="forceRerender()" @click="index">Next</b-button>
     </b-jumbotron>
   </div>
@@ -55,7 +56,8 @@ export default {
       }
       this.answers = answers;
       return answers;
-    }
+    },
+
   },
   methods: {
     forceRerender: function() {
@@ -67,7 +69,7 @@ export default {
         750
       );
     },
-
+    
     correctSelected(index) {
       let evaluteCorrect = userAnswer => {
         let indexCorrect = this.selectedAnswer;
@@ -123,8 +125,8 @@ export default {
   cursor: pointer;
 }
 
-.selected {
-  background-color: blue;
+.already-item-selected:hover {
+    cursor: default;
 }
 
 .correct {

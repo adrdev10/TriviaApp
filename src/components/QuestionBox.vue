@@ -18,7 +18,7 @@
           <b-list-group-item
             v-for="(answer, i) in listAnswers"
             v-bind:key="i"
-            v-on:click.self.prevent.once="selectedAnswerChoice(i)"
+            v-on:click="selectedAnswerChoice(i)"
             v-bind:class="correctSelected(i)"
           >{{answer}}</b-list-group-item>
         </b-list-group>
@@ -39,6 +39,7 @@ export default {
       show: true,
       answers: null,
       selectedAnswer: "",
+      //Data for the score system
       isUserCorrect: Boolean,
     };
   },
@@ -59,6 +60,26 @@ export default {
     },
 
   },
+
+    watch: {
+        selectedAnswer: function(newVal, oldVal) {
+            // if(oldVal === ""){
+            //      console.log("New Selection on a new array of questions");
+            // }
+            // else if(newVal) {
+            //     this.selectedAnswer = "You can't change your first response"
+            //     setTimeout(function() {
+            //         this.selectedAnswer = oldVal;
+            //     }, 3000);
+            // }
+            this.$watch("answers", function() {
+                console.log("The array object changed");
+                this.selectedAnswer = "";
+            })
+            console.log(count);
+        },
+    },
+
   methods: {
     forceRerender: function() {
       this.show = false;
@@ -101,6 +122,7 @@ export default {
         this.selectedAnswer = answers[index];
       };
       ans(index);
+
     }
   },
 
@@ -126,7 +148,7 @@ export default {
 }
 
 .already-item-selected:hover {
-    cursor: default;
+  cursor: default;
 }
 
 .correct {
